@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Login Logout Form</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <style>
+    body {
+      text-align: center;
+      font-family: Arial;
+    }
+    #welcomeSection, #forgotSection, #nextStepSection {
+      display: none;
+    }
+    #eyeIcon {
+      cursor: pointer;
+    }
+    .navbar-brand {
+      color: white !important;
+    }
+    .SigninSection h2{
+        color:blue;
+    }
+    .footer {
+      width: 100%;
+      background-color: #343a40;
+      color: #ffffff;
+      padding: 20px 0;
+      font-size: 15px;
+      position: fixed;
+      bottom: 0;
+      left: 0;
+    }
+  </style>
+</head>
+<body>
+
+<!-- Navbar -->
+<nav class="navbar navbar-expand-lg px-4" style="background-color: #343a40;">
+  <a class="navbar-brand text-white" href="#">CityClean</a>
+  <div class="ms-auto">
+    <a class="nav-link d-inline text-white"  href="Home.html">Home</a>
+    <a class="nav-link d-inline text-white" href="Service.html">Services</a>
+    <a class="nav-link d-inline text-white" href="Request.html">Request</a>
+    <a class="nav-link d-inline text-white" href="Contact.html">Contact</a>
+  </div>
+</nav>
+
+<br><br><br>
+
+<div class="container my-4">
+  <div class="row align-items-center">
+    <!-- Left side image -->
+    <div class="col-md-6">
+      <img src="https://www.nobroker.in/blog/wp-content/uploads/2023/01/clean-city-1-768x402.jpg"
+           class="img-fluid rounded" style="max-height: 200px;" alt="Clean City Image" />
+    </div>
+
+    <!-- Step 1: Email/Phone -->
+    <div class="col-md-6" id="SigninSection">
+      <h2>Sign in to CityClean</h2>
+      <input type="text" id="EmailorphonenumberInput" placeholder="Email or phone number" />
+      <br><br>
+      <button onclick="handleLogin()">Next</button>
+    </div>
+
+    <!-- Step 2: Password -->
+    <div class="col-md-6" id="welcomeSection">
+      <h1 id="headerMessage"></h1>
+      <p>
+        <span id="welcomeDisplay"></span>
+        <span id="emailDisplay"></span>
+        <span><a href="#Change" onclick="goBack()">Change</a></span>
+      </p>
+      <input type="password" id="Password" placeholder="Password" />
+      <span id="eyeIcon" onclick="togglePassword()">
+        <i class="bi bi-eye-slash" id="eyeIconElement"></i>
+      </span>
+      <br><br>
+      <button onclick="handlePasswordLogin()">Sign in</button>
+      <button id="forgotBtn" onclick="forgotPassword()" style="display: none;">Forgot Password?</button>
+    </div>
+
+    <!-- Step 3: Forgot Password -->
+    <div class="col-md-6" id="forgotSection">
+      <h2 id="headmessage"></h2>
+      <p id="RequestDisplay"></p>
+      <input type="email" id="emailInput" placeholder="Enter your email" /><br>
+      <button onclick="sendReset()">Send Reset Link</button>
+      <p id="message"></p>
+      <button onclick="backToLogin()">Back to Login</button>
+    </div>
+
+    <!-- Step 4: Dashboard (Next Step) -->
+    <div class="col-md-6" id="nextStepSection">
+      <h2>Welcome to CityClean Dashboard 🚀</h2>
+      <p>You are successfully logged in ✅</p>
+      <button class="btn btn-danger" onclick="logout()">Logout</button>
+    </div>
+  </div>
+</div>
+
+<script>
+  function handleLogin() {
+    const name = document.getElementById("EmailorphonenumberInput").value.trim();
+
+    if (name !== "") {
+      document.getElementById("headerMessage").textContent = `Enter Your Password`;
+      document.getElementById("welcomeDisplay").textContent = `Welcome, `;
+      document.getElementById("emailDisplay").textContent = name;
+
+      document.getElementById("SigninSection").style.display = "none";
+      document.getElementById("welcomeSection").style.display = "block";
+    } else {
+      alert("Please enter your email or phone number");
+    }
+  }
+
+  function handlePasswordLogin() {
+    const enteredPassword = document.getElementById("Password").value.trim();
+    const originalPassword = "abc123";
+    const forgotBtn = document.getElementById("forgotBtn");
+
+    if (enteredPassword === "") {
+      alert("Please enter your password");
+      forgotBtn.style.display = "none";
+    } else if (enteredPassword.length < 6) {
+      alert("Password must be at least 6 characters");
+      forgotBtn.style.display = "none";
+    } else if (enteredPassword !== originalPassword) {
+      alert("Incorrect password!");
+      forgotBtn.style.display = "inline-block";
+    } else {
+      document.getElementById("welcomeSection").style.display = "none";
+      document.getElementById("nextStepSection").style.display = "block";
+      forgotBtn.style.display = "none";
+    }
+  }
+
+  function togglePassword() {
+    const pwd = document.getElementById("Password");
+    const eyeIcon = document.getElementById("eyeIconElement");
+
+    if (pwd.type === "password") {
+      pwd.type = "text";
+      eyeIcon.classList.remove("bi-eye-slash");
+      eyeIcon.classList.add("bi-eye");
+    } else {
+      pwd.type = "password";
+      eyeIcon.classList.remove("bi-eye");
+      eyeIcon.classList.add("bi-eye-slash");
+    }
+  }
+
+  function goBack() {
+    document.getElementById("EmailorphonenumberInput").value = "";
+    document.getElementById("Password").value = "";
+    document.getElementById("SigninSection").style.display = "block";
+    document.getElementById("welcomeSection").style.display = "none";
+  }
+
+  function forgotPassword() {
+    document.getElementById("SigninSection").style.display = "none";
+    document.getElementById("welcomeSection").style.display = "none";
+    document.getElementById("forgotSection").style.display = "block";
+
+    document.getElementById("headmessage").textContent = "🔐 Forgot Your Password?";
+    document.getElementById("RequestDisplay").textContent = "Don't worry! We'll send a reset link to your email.";
+  }
+
+ function sendReset() {
+  const email = document.getElementById("emailInput").value.trim();
+  const message = document.getElementById("message");
+
+  if (email === "") {
+    message.textContent = "❌ Please enter your email.";
+    message.style.color = "red";
+  } else if (!email.includes("@") || !email.includes(".")) {
+    message.textContent = "❌ Please enter a valid email address.";
+    message.style.color = "red";
+  } else {
+    message.textContent = "✅ A reset link has been sent! Redirecting to Home...";
+    message.style.color = "green";
+
+    // Redirect to home page after 2 seconds
+    setTimeout(() => {
+      window.location.href = "index.html"; // <-- Replace with your home page file name
+    }, 2000);
+  }
+}
+
+
+  function backToLogin() {
+    document.getElementById("forgotSection").style.display = "none";
+    document.getElementById("SigninSection").style.display = "block";
+  }
+
+  function logout() {
+    document.getElementById("nextStepSection").style.display = "none";
+    document.getElementById("SigninSection").style.display = "block";
+    document.getElementById("EmailorphonenumberInput").value = "";
+    document.getElementById("Password").value = "";
+  }
+</script>
+
+<!-- Footer -->
+<footer class="footer">
+  <p>© 2025 CityClean | Built for Public Service Project</p>
+</footer>
+
+</body>
+</html>
